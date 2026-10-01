@@ -1,0 +1,139 @@
+function authHTML(){
+  const m=ui.auth;
+
+  if(m==='home'){
+    return `
+    <div class="auth-page">
+      <button class="admin-entry" data-a="am" data-i="hid">
+        Administrative Access
+      </button>
+
+      <div class="auth">
+        <div class="crest">MAMCE</div>
+        <div class="auth-title">Campus</div>
+        <p class="mu">${COLLEGE.name}</p>
+
+        <div class="glass auth-card">
+          <h2>Welcome Back</h2>
+          <p class="mu">Sign in to continue to your campus account.</p>
+
+          <button class="btn" data-a="am" data-i="student">
+            Student Login
+          </button>
+
+          <button class="btn ghost" data-a="am" data-i="other">
+            Other College Student
+          </button>
+        </div>
+
+        <p class="auth-footer">
+          ${new Date().getFullYear()} · MAMCE Campus
+        </p>
+      </div>
+    </div>`;
+  }
+
+  if(m==='hid'){
+    return `
+    <div class="auth-page">
+      <div class="auth">
+        <div class="crest">MAMCE</div>
+        <div class="auth-title">Administrative Access</div>
+        <p class="mu">${COLLEGE.name}</p>
+
+        <div class="glass auth-card">
+          <button class="btn" data-a="am" data-i="staff">
+            Staff Login
+          </button>
+
+          <button class="btn ghost" data-a="am" data-i="principal">
+            Principal Login
+          </button>
+
+          <button class="btn ghost sm" data-a="am" data-i="home">
+            Back to Student Login
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  const P={
+    student:[
+      'Student Sign In',
+      fld('roll','Roll Number')+
+      fld('mobile','Registered Mobile','tel',MOB)+
+      OTPF,
+      '<p class="mu">First time here? <a href="#" data-a="am" data-i="sreg">Register</a></p>'
+    ],
+
+    sreg:[
+      'Student Registration',
+      fld('name','Full Name')+
+      fld('roll','Roll Number')+
+      fld('dob','Date of Birth','date')+
+      sel('dept','Department',DEPTS)+
+      fld('yj','Year Joined','number','min=2015 max=2035 required')+
+      sel('hostel','Residence',['Day scholar','Hosteller'])+
+      fld('mobile','Student Mobile','tel',MOB)+
+      fld('pm','Parent Mobile','tel',MOB)+
+      OTPF,
+      '<p class="mu">Expected year ending is automatically calculated.</p>'
+    ],
+
+    other:[
+      'Other College Student',
+      fld('college','College Name')+
+      fld('roll','Roll Number')+
+      fld('mobile','Mobile','tel',MOB)+
+      OTPF,
+      ''
+    ],
+
+    staff:[
+      'Staff Sign In',
+      fld('name','Staff Name')+
+      fld('sid','Staff ID')+
+      sel('dept','Department',DEPTS)+
+      fld('mobile','Registered Mobile','tel',MOB)+
+      OTPF,
+      ''
+    ],
+
+    principal:[
+      'Principal Sign In',
+      fld('mobile','Registered Mobile','tel',MOB)+
+      fld('code','Additional Verification Code','password')+
+      OTPF,
+      ''
+    ]
+  }[m];
+
+  const back=`
+    <button class="btn ghost sm" data-a="am"
+      data-i="${m==='sreg'?'student':'hid'}">
+      ← Back
+    </button>`;
+
+  return `
+  <div class="auth-page">
+    <div class="auth">
+      <div class="crest">MAMCE</div>
+      <div class="auth-title">${P[0]}</div>
+      <p class="mu">${COLLEGE.name}</p>
+
+      <div class="glass auth-card">
+        ${back}
+        <form data-f="auth">
+          ${P[1]}
+          <p class="err"></p>
+          <button class="btn">
+            Verify & Continue
+          </button>
+        </form>
+
+        ${P[2]}
+      </div>
+    </div>
+  </div>`;
+}
